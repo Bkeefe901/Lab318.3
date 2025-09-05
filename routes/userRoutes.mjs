@@ -1,5 +1,6 @@
 import express from 'express';
 import { users } from '../data/users.mjs';
+import { posts } from '../data/posts.mjs';
 
 const router = express.Router();
 
@@ -34,6 +35,17 @@ router
             res.json(user);
 
         } else res.status(400).json({ msg: "Insuffecient Data" })
+    })
+
+
+
+router
+    .route("/:id/posts")
+    .get((req, res, next) => {
+        const userPosts = posts.filter((post)=> post.userId == req.params.id);
+        if(userPosts){
+            res.json(userPosts);
+        } else next();
     })
 
 
@@ -87,9 +99,9 @@ router
                 } else next();
             })
 
-router.get("/test", (req, res)=>{
-    res.json("testing testing");
-})
+
+
+
 
 
 export default router;

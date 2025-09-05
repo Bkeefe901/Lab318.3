@@ -2,6 +2,7 @@
 import express from 'express';
 import userRoutes from './routes/userRoutes.mjs';
 import postRoutes from './routes/postsRoutes.mjs';
+import commentsRoutes from './routes/commentsRoutes.mjs';
 import { error } from './utilities/error.mjs';
 
 
@@ -62,9 +63,12 @@ app.use("/api", function (req, res, next) {
   next();
 });
 
+
+
 // Routes
 app.use('/api/users', userRoutes);
 app.use('/api/posts', postRoutes);
+app.use('/api/comments', commentsRoutes);
 
 
 // Adding some HATEOAS links.
