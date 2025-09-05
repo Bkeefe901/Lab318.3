@@ -11,7 +11,13 @@ const router = express.Router();
 router
     .route("/")
         .get((req, res)=>{
-            res.json(posts);
+            // get for ?userId query must use format: localhost:3000/api/posts/?userId=<value>&api-key=<key>
+            const userId = req.query.userId;
+            if(userId){
+            const userPosts = posts.filter((post) => post.userId == userId);
+            res.json(userPosts);
+            } else res.json(posts);;
+            
         })
         .post((req, res)=>{
             const {userId, title, content} = req.body; // grabing these values from the req.body
