@@ -63,6 +63,19 @@ router
         } else next();
 
     })
+    .delete((req, res, next)=>{
+        const id = req.params.id;
+        const comment = comments.find((comment, i) => { // find the comment
+            if (comment.id == id) {
+                comments.splice(i, 1);
+                return true;
+            }
+        })
+        // send a response
+        if (comment) {
+            res.json(comments);
+        } else next();
+    })
 
 
 

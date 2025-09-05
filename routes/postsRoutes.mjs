@@ -33,7 +33,6 @@ router
 
 
 
-
 // Show one post route
 // @route GET /api/posts/:id
 // @desc Get ONE post
