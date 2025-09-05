@@ -3,7 +3,6 @@ import express from 'express';
 import userRoutes from './routes/userRoutes.mjs';
 import postRoutes from './routes/postsRoutes.mjs';
 import commentsRoutes from './routes/commentsRoutes.mjs';
-import { posts } from './data/posts.mjs';
 import { error } from './utilities/error.mjs';
 
 

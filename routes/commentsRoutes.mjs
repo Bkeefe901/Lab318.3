@@ -8,7 +8,18 @@ const router = express.Router();
 router
     .route("/")
     .get((req, res) => {
-        res.json(comments);
+        // get for ?userId query must use format: localhost:3000/api/comments/?userId=<value>&api-key=<key>
+        const userId = req.query.userId;
+        // grabbing postId query if it exists, must use format: localhost:3000/api/comments/?postId=<value>&api-key=<key>
+        const postId = req.query.postId;
+
+        if (userId) { // If userId query used find comments with that userId and return those comments
+            const userComments = comments.filter((comment) => comment.userId == userId);
+            res.json(userComments);
+        } else if(postId){ // If postId query used find comments with that postId and return that comment(s)
+            const pIComment = comments.filter((comment) => comment.postId == postId);
+            res.json(pIComment);
+        } else res.json(comments);
     })
     .post((req, res) => {
         const { userId, postId, body } = req.body; // grabing these values from the req.body
@@ -63,7 +74,7 @@ router
         } else next();
 
     })
-    .delete((req, res, next)=>{
+    .delete((req, res, next) => {
         const id = req.params.id;
         const comment = comments.find((comment, i) => { // find the comment
             if (comment.id == id) {
