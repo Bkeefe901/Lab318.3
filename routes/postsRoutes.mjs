@@ -1,5 +1,6 @@
 import express from 'express';
 import { posts } from '../data/posts.mjs';
+import { comments } from '../data/comments.mjs';
 
 const router = express.Router();
 
@@ -35,7 +36,24 @@ router
                 res.status(400).json({msg: "Insuffecient Data"});
             }
         })
-        
+    
+// Get all comments
+// @route GET /api/posts/:id/comments
+// @desc Get all comments for one post
+// @access Public
+
+router
+    .route("/:id/comments")
+    .get((req, res, next) => {
+        const postComments = comments.filter((comment)=> comment.postId == req.params.id);
+        if(postComments){
+            let justComs = [];
+            for(let com of postComments){
+                justComs.push(com.body)
+            }
+            res.json(justComs);
+        } else next();
+    })
 
 
 
