@@ -1,6 +1,7 @@
 import express from 'express';
 import { users } from '../data/users.mjs';
 import { posts } from '../data/posts.mjs';
+import { comments } from '../data/comments.mjs';
 
 const router = express.Router();
 
@@ -37,7 +38,24 @@ router
         } else res.status(400).json({ msg: "Insuffecient Data" })
     })
 
+// Show All Comments Made by One User 
+// @route GET /api/users/:id/comments
+// @desc Get all comments for ONE user
+// @access Public
 
+router
+    .route("/:id/comments")
+    .get((req, res, next) => {
+        const userComments = comments.filter((comment)=> comment.userId == req.params.id);
+        if(userComments){
+            res.json(userComments);
+        } else next();
+    })
+
+// Show All Posts Made by One User 
+// @route GET /api/users/:id/posts
+// @desc Get all posts for ONE user
+// @access Public
 
 router
     .route("/:id/posts")

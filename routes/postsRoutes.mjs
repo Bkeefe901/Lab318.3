@@ -37,22 +37,41 @@ router
             }
         })
     
-// Get all comments
-// @route GET /api/posts/:id/comments
-// @desc Get all comments for one post
-// @access Public
+// localhost:3000/api/posts/4/comments?userId=2&api-key=perscholas
+// localhost:3000/api/comments?api-key=perscholas
 
 router
     .route("/:id/comments")
     .get((req, res, next) => {
-        const postComments = comments.filter((comment)=> comment.postId == req.params.id);
-        if(postComments){
+        const userId = req.query.userId;
+        // Get all comments made on one post by one user
+        // @route GET /api/posts/:id/comments?userId=<vaule>
+        // @desc Get all comments for one post made by one user
+        // @access Public
+        if(userId){ // Checks if a query for userId was used
+            const thePost = posts.find((post)=> post.id == req.params.id);
+            const postId = thePost.id;
+            const userComments = comments.filter((comment)=> (comment.postId == postId && comment.userId == userId));
+            if(userComments){
+                res.json(userComments); // get for ?userId query must use format: localhost:3000/api/posts/:id/comments?userId=<value>&api-key=<key>
+            } else next();
+        } else{
+            // Get all comments made one post
+            // @route GET /api/posts/:id/comments
+            // @desc Get all comments for one post
+            // @access Public
+            const postComments = comments.filter((comment)=> comment.postId == req.params.id);
+            if(postComments){
             let justComs = [];
             for(let com of postComments){
                 justComs.push(com.body)
             }
             res.json(justComs);
-        } else next();
+            } else next();
+
+        }
+
+        
     })
 
 
