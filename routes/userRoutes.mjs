@@ -38,18 +38,34 @@ router
         } else res.status(400).json({ msg: "Insuffecient Data" })
     })
 
-// Show All Comments Made by One User 
-// @route GET /api/users/:id/comments
-// @desc Get all comments for ONE user
-// @access Public
+
 
 router
     .route("/:id/comments")
     .get((req, res, next) => {
-        const userComments = comments.filter((comment)=> comment.userId == req.params.id);
-        if(userComments){
-            res.json(userComments);
-        } else next();
+        const postId = req.query.postId;
+        // Show All Comments Made a specific User on one post 
+        // @route GET /api/users/:id/comments?postId=<Value>
+        // @desc Get all comments for ONE user on ONE post
+        // @access Public
+        if(postId){ // localhost:3000/api/users/2/comments?postId=4&api-key=perscholas
+            const theUser = users.find((user)=> user.id == req.params.id);
+            const userId = theUser.id;
+            const postComments = comments.filter((comment)=> (comment.userId == userId && comment.postId == postId));
+            if(postComments){
+                res.json(postComments);
+            } else next();
+        } else{
+            // Show All Comments Made by One User 
+            // @route GET /api/users/:id/comments
+            // @desc Get all comments for ONE user
+            // @access Public
+            const userComments = comments.filter((comment)=> comment.userId == req.params.id);
+            if(userComments){
+                res.json(userComments);
+            } else next();
+        }
+
     })
 
 // Show All Posts Made by One User 
